@@ -7,7 +7,7 @@
 
 #include<stdio.h>
 #include <stdlib.h>
-#include "my_err.h"
+#include "../include/my_err.h"
 static void my_exit1(void);
 static void my_exit2(void);
 
