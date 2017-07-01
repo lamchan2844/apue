@@ -10,7 +10,12 @@ echo "redirection,change stdout to temp.out"
 cat temp.out
 echo "*************************************************************"
 echo "vfork"
-g++ vfork_use.c -o vfork_use.out
+gcc vfork_use.c -o vfork_use.out
 ./vfork_use.out
 echo "we can see that the global variable have been changed because the child proc run in parent's address zone"
 echo "*************************************************************"
+#gcc waitpid_use.c pr_exit.c -o waitpid_use.out
+#./waitpid_use.out
+#echo "*************************************************************"
+
+rm *.out
