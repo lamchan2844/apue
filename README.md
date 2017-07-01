@@ -154,3 +154,31 @@ int execlp(const char *file, const char *arg, ...);
 int execvp(const char *file, char *const argv[]);
 int fexecve(int fd, char *const argv[], char *const envp);
 ```
+
+###解释器文件
+
+起始行形式：
+```#! pathname [optional-argument]```
+
+常见的是：
+```#! /bin/sh```
+
+### system函数
+
+```
+#include<stdlib.h>
+int system(const char* cmdstring);
+```
+**函数说明**
+
+system（）会调用fork（）产生子进程，由子进程来调用/bin/sh -c string来执行参数string字符串所代表的命令，此命令执行完后随即返回原调用的进程。在调用system（）期间SIGCHLD 信号会被暂时搁置，SIGINT和SIGQUIT 信号则会被忽略。
+
+**返回值**
+
+- 如果fork（）失败 返回-1：出现错误
+
+- 如果exec（）失败，表示不能执行Shell，返回值相当于Shell执行了exit（127）
+
+- 如果执行成功则返回子Shell的终止状态
+
+如果system（）在调用/bin/sh时失败则返回127，其他失败原因返回-1。若参数string为空指针（NULL），仅当命令处理程序可用时，返回非零值，可以通过这一特征判断在一个给定的操作系统上是否支持system函数(当system函数返回值为0时，表明system函数无效，在UNIX系统中，system函数总是可用的)；。如果system（）调用成功则最后会返回执行shell命令后的返回值，但是此返回值也有可能为 system（）调用/bin/sh失败所返回的127，因此最好能再检查errno 来确认执行成功。
