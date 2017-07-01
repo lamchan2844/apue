@@ -79,6 +79,7 @@ pid_t waitpid(pid_t pid, int *statloc, int options);
 |WIFSIGNALED(status)|若为异常终止子进程返回的状态，则为真（接到一个不捕捉的信号）。对于这种情况，可执行WTERMSIG(status)，取使子进程终止的信号编号。另外，有些实现定义宏WCOREDUMP(status)，若已产生终止进程的core文件，则它返回真|
 |WIFSTOPPED(status)|若为当前暂停子进程的返回状态，则为真。对于这种情况，可执行WSTOPSIG(status)，取使子进程暂停的信号编号|
 |WIFCONTINUED(status)|若在作业控制暂停后已经继续的子进程返回了状态，则为真。（POSIX.1的XSI扩展；仅用于waitpid。）|
+
 **wait和waitpid的区别**
 1. 在一个子进程终止之前，wait使其调用者阻塞，waitpid有一选项，可使调用者不阻塞。
 2. waitpid并不等待其调用之后的第一个终止的子进程，有若干选型，可以控制等待的子进程。
