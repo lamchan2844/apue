@@ -140,3 +140,17 @@ pid_t wait4(pid_t pid, int *statloc, int options, struct rusage *rusage);
 ### 竞争状态
 
 多个进程都企图对共享数据进行某种处理，而最后的结果又取决于进程运行的顺序时，则我们认为这发生了竞争条件（race condition）。如果在fork之后的某种逻辑显式或隐式地依赖于在fork之后是父进程先运行还是子进程先运行，那么fork函数就会是竞争条件活跃的滋生地。通常，我们不能预料哪一个进程先运行。即使知道哪一个进程先运行，那么在该进程开始运行后，所发生的事情也依赖于系统负载以及内核的调度算法。
+
+### exec
+
+有7个exec函数可供调用
+```
+#include <unistd.h>
+int execl(const char *path, const char *arg, ...)
+int execv(const char *path, char *const argv[]);
+int execle(const char *path, const char *arg, ..., char *const envp[]);
+int execve(const char *path, char *const argv[], char *const envp[]);
+int execlp(const char *file, const char *arg, ...);
+int execvp(const char *file, char *const argv[]);
+int fexecve(int fd, char *const argv[], char *const envp);
+```
