@@ -71,6 +71,27 @@ init被编写为无论何时其子进程终止，init就调用wait来取得其�
 pid_t wait(int *statloc);
 pid_t waitpid(pid_t pid, int *statloc, int options);
 ```
+**检查wait和waitpid所返回的终止状态的宏**
+
+|宏|说明|
+|--|--|
+|WIFEXITED(status)|若为正常终止子进程返回的状态，则为真。对于这种情况可执行WEXITSTATUS(status)，取子进程传送给exit、_exit或_Exit参数的低8位|
+|WIFSIGNALED(status)|若为异常终止子进程返回的状态，则为真（接到一个不捕捉的信号）。对于这种情况，可执行WTERMSIG(status)，取使子进程终止的信号编号。另外，有些实现定义宏WCOREDUMP(status)，若已产生终止进程的core文件，则它返回真|
+|WIFSTOPPED(status)|若为当前暂停子进程的返回状态，则为真。对于这种情况，可执行WSTOPSIG(status)，取使子进程暂停的信号编号|
+|WIFCONTINUED(status)|若在作业控制暂停后已经继续的子进程返回了状态，则为真。（POSIX.1的XSI扩展；仅用于waitpid。）|
 **wait和waitpid的区别**
 1. 在一个子进程终止之前，wait使其调用者阻塞，waitpid有一选项，可使调用者不阻塞。
 2. waitpid并不等待其调用之后的第一个终止的子进程，有若干选型，可以控制等待的子进程。
+
+**waitpid options常量**
+
+|常量|说明|
+|--|--|
+|WCONTINUED|若实现支持作业控制，那么由pid指定的任一子进程在暂停后已经继续，但其状态尚未报告，则返回其状态|
+|WNOHANG|若由pid指定的子进程并不是立即可用的，则waitpid不阻塞，此时其返回值为0|
+|WUNTRACED|若某实现支持作业控制，而由pid指定的任一子进程已处于暂停状态，并且其状态自暂停以来还未报告过，则返回其状态。WIFSTOPPED宏确定返回值是否对应于一个暂停子进程|
+
+waitpid提供了wait函数没有的三个功能
+1. 等待一个特定的进程
+2. 提供了一个wait的非阻塞版本，有时希望获取一个子进程的状态，但是不想阻塞
+3. waitpid通过WUNTRACED和WCONTINUED选项支持作业控制
