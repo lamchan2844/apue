@@ -96,3 +96,43 @@ waitpid提供了wait函数没有的三个功能
 1. 等待一个特定的进程
 2. 提供了一个wait的非阻塞版本，有时希望获取一个子进程的状态，但是不想阻塞
 3. waitpid通过WUNTRACED和WCONTINUED选项支持作业控制
+
+
+### waitid
+waitid也可以取得进程终止状态，比waitpid更加灵活。
+```
+#include <sys/wait.h>
+int waitid(idtype_t idtype, id_t id, siginfo_t *infop, int options);
+```
+**waitid的idtype常量**
+
+|常量|说明|
+|--|--|
+|P_PID|等待一个特定的进程：id包含要等待子进程的进程ID|
+|P_PGID|等待一个特定进程组中的任一个子进程：id包含要等待子进程的进程组ID|
+|P_ALL|等待任一个子进程：忽略id|
+
+**waitid的options常量**
+
+|常量|说明|
+|--|--|
+|WCONTINUED|等待一个进程，它以前曾被暂停，此后又已继续，但其状态尚未报告|
+|WEXITED|等待已退出的进程|
+|WNOHANG|如无可用的子进程退出状态，立即返回而非阻塞|
+|WNOWAIT|不破坏子进程退出状态。该子进程退出状态可由后续的wait、waitid或waitpid调用取得|
+|WSTOPPED|等待一个进程，它已经暂停，但其状态尚未报告|
+
+infop参数指向siginfo结构的指针，该结构包含了造成子进程状态改变有关信号的详细信息。
+
+### wait3和wait4
+wait3和wait4提供的功能比wait、waitpid和waitid所提供的功能要多一个，这与附加参数rusage有关。该参数要求内核返回由终止进程及其所有子进程使用的资源汇总。
+```
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+pid_t wait3(int *statloc, int options, struct rusage *rusage);
+pid_t wait4(pid_t pid, int *statloc, int options, struct rusage *rusage);
+//两个函数返回值:若成功返回进程ID，若出错则返回-1
+```
+资源统计信息包括用户CPU时间总量、系统CPU时间总量、页面出错次数、接收到信号的次数等
