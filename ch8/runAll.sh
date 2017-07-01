@@ -14,8 +14,17 @@ gcc vfork_use.c -o vfork_use.out
 ./vfork_use.out
 echo "we can see that the global variable have been changed because the child proc run in parent's address zone"
 echo "*************************************************************"
+echo "wait and waitpid"
+gcc wait_use.c pr_exit.c -o wait_use.out
+./wait_use.out
+
 #gcc waitpid_use.c pr_exit.c -o waitpid_use.out
 #./waitpid_use.out
 #echo "*************************************************************"
+echo "*************************************************************"
+gcc echoAll.c -o echoAll
+gcc exec_use.c -o exec_use.out
+./exec_use.out
+echo "*************************************************************"
 
-rm *.out
+rm *.out echoAll

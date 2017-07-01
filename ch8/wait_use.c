@@ -1,8 +1,9 @@
-#include "../include/my_err.h"
-#include "pr_exit.h"
+#include <stdlib.h>
 #include <stdio.h>
 #include <sys/wait.h>
-#include <stdlib.h>
+#include <unistd.h>
+#include "../include/my_err.h"
+#include "../include/pr_exit.h"
 int main()
 {
 	pid_t pid;
