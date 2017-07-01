@@ -26,5 +26,9 @@ gcc echoAll.c -o echoAll
 gcc exec_use.c -o exec_use.out
 ./exec_use.out
 echo "*************************************************************"
+echo "system..."
+gcc system_use.c my_system.c pr_exit.c -o system_use.out
+./system_use.out
+echo "*************************************************************"
 
-rm *.out echoAll
+rm *.out echoAll 

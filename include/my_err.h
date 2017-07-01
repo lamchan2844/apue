@@ -5,8 +5,9 @@
 	> Created Time: 2017年06月30日 星期五 10时02分58秒
  ************************************************************************/
 
-#ifndef _MY_ERR_H
-#define _MY_ERR_H
+#ifndef MY_ERR_H
+#define MY_ERR_H
+#include <stdlib.h>
 #include <errno.h> /* for definition of errno */
 #include <stdarg.h> /* ISO C variable aruments */
 #include <string.h>
