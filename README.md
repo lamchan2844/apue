@@ -3,7 +3,7 @@ apue-example
 
 ## ch8
 
-进程控制
+**进程控制**
 - 创建新进程
 - 执行程序
 - 进程终止
@@ -155,7 +155,7 @@ int execvp(const char *file, char *const argv[]);
 int fexecve(int fd, char *const argv[], char *const envp);
 ```
 
-###解释器文件
+### 解释器文件
 
 起始行形式：
 ```#! pathname [optional-argument]```
@@ -182,3 +182,66 @@ system（）会调用fork（）产生子进程，由子进程来调用/bin/sh -c
 - 如果执行成功则返回子Shell的终止状态
 
 如果system（）在调用/bin/sh时失败则返回127，其他失败原因返回-1。若参数string为空指针（NULL），仅当命令处理程序可用时，返回非零值，可以通过这一特征判断在一个给定的操作系统上是否支持system函数(当system函数返回值为0时，表明system函数无效，在UNIX系统中，system函数总是可用的)；。如果system（）调用成功则最后会返回执行shell命令后的返回值，但是此返回值也有可能为 system（）调用/bin/sh失败所返回的127，因此最好能再检查errno 来确认执行成功。
+
+## ch10 信号
+
+信号是软件中断。
+
+**UNIX 系统信号**
+```
+No    Name         Default Action       Description
+1     SIGHUP       terminate process    terminal line hangup
+2     SIGINT       terminate process    interrupt program
+3     SIGQUIT      create core image    quit program
+4     SIGILL       create core image    illegal instruction
+5     SIGTRAP      create core image    trace trap
+6     SIGABRT      create core image    abort program (formerly SIGIOT)
+7     SIGEMT       create core image    emulate instruction executed
+8     SIGFPE       create core image    floating-point exception
+9     SIGKILL      terminate process    kill program
+10    SIGBUS       create core image    bus error
+11    SIGSEGV      create core image    segmentation violation
+12    SIGSYS       create core image    non-existent system call invoked
+13    SIGPIPE      terminate process    write on a pipe with no reader
+14    SIGALRM      terminate process    real-time timer expired
+15    SIGTERM      terminate process    software termination signal
+16    SIGURG       discard signal       urgent condition present on socket
+17    SIGSTOP      stop process         stop (cannot be caught or ignored)
+18    SIGTSTP      stop process         stop signal generated from keyboard
+19    SIGCONT      discard signal       continue after stop
+20    SIGCHLD      discard signal       child status has changed
+21    SIGTTIN      stop process         background read attempted from control terminal
+22    SIGTTOU      stop process         background write attempted to control terminal
+23    SIGIO        discard signal       I/O is possible on a descriptor (see fcntl(2))
+24    SIGXCPU      terminate process    cpu time limit exceeded (see setrlimit(2))
+25    SIGXFSZ      terminate process    file size limit exceeded (see setrlimit(2))
+26    SIGVTALRM    terminate process    virtual time alarm (see setitimer(2))
+27    SIGPROF      terminate process    profiling timer alarm (see setitimer(2))
+28    SIGWINCH     discard signal       Window size change
+29    SIGINFO      discard signal       status request from keyboard
+30    SIGUSR1      terminate process    User defined signal 1
+31    SIGUSR2      terminate process    User defined signal 2
+```
+
+**处理信号的三种方法**
+1. **忽略此信号**
+
+有两个信号无法忽略：SIGKILL和SIGSTOP。
+2. **捕捉信号**
+
+通知内核在某种信号发生时，调用一个用户函数。在用户函数中，执行用户希望对这种时间进行的处理。
+3. **执行系统默认动作**
+
+对于大多数信号，系统默认动作是终止该进程。
+
+### signal函数
+
+```
+#include <signal.h>
+void (*signal (int signo, void (* func)(int)))(int);
+```
+上面表达式太复杂，使用时可使用下面表达式
+```
+typedef void Sigfunc(int);
+Sigfunc * signal(int, Sigfunc *);
+```
